@@ -1,0 +1,55 @@
+{{ define "title" }}
+Login
+{{ end }}
+
+{{ define "body" }}
+<div class="row">
+  <div class="col-md-6 mx-auto mt-3">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-center">Login</h2>
+      </div>
+      <form action="/login" method="post">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" class="form-control" type="text" name="email" />
+              {{ if kindIs "map" .flash.msg }}
+                {{ if .flash.msg.Email }}<span class="text-danger">{{ index .flash.msg.Email 0 }}</span>{{ end }}
+              {{ end }}
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              class="form-control"
+              type="password"
+              name="password"
+            />
+            {{ if kindIs "map" .flash.msg }}
+              {{ if .flash.msg.Password }}<span class="text-danger">{{ index .flash.msg.Password 0 }}</span>{{ end }}
+            {{ end }}
+          </div>
+          {{ if and .flash.type (kindIs "string" .flash.msg) }}
+            {{ $dict := dict }}
+            {{ if eq .flash.type "error" }}
+              {{ $dict = dict "type" "danger" "flash" .flash }}
+            {{ else if eq .flash.type "done" }}
+              {{ $dict = dict "type" "success" "flash" .flash }}
+            {{ end }}
+            {{ template "alert" $dict }}
+          {{ end }}
+        </div>
+        <div class="card-footer">
+          <input
+            type="submit"
+            value="SignIn"
+            class="btn btn-primary btn-block"
+          />
+          <a href="/register" class="btn btn-success btn-block">Registrarse</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{ end }}
